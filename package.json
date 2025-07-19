@@ -1,5 +1,5 @@
 {
-  "name": "starter",
+  "name": "weather-app",
   "type": "module",
   "private": true,
   "version": "1.0.0",

@@ -140,3 +140,47 @@ main {
 .search__wrapper {
     position: relative;
 }
+
+.container--right {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.weather__feels-like,
+.weather__humidity,
+.weather__chance-of-precip,
+.weather__wind-speed {
+    display: flex;
+}
+
+.feels-like__icon-wrapper,
+.humidity__icon-wrapper,
+.chance-of-precip__icon-wrapper,
+.wind-speed__icon-wrapper {
+    margin-right: 10px;
+}
+
+.feels-like__title,
+.humidity__title,
+.chance-of-precip__title,
+.wind-speed__title {
+    font-size: 13px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.feels-like__temperature,
+.humidity__percentage,
+.chance-of-precip__percentage,
+.wind-speed__speed {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.feels-like__img,
+.humidity__img,
+.chance-of-precip__img,
+.wind-speed__img {
+    width: 30px;
+}

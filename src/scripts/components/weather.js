@@ -6,10 +6,7 @@ const searchBtn = document.getElementById('searchBtn');
 let searchValue;
 
 form.addEventListener('submit', fetchWeather);
-search.addEventListener('input', () => {
-    searchValue = search.value.trim();
-    console.log(searchValue.length);
-});
+search.addEventListener('input', () => (searchValue = search.value.trim()));
 searchBtn.addEventListener('click', fetchWeather);
 switchBtn.addEventListener('change', switchUnits);
 

@@ -1,7 +1,12 @@
 body {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background-image: url('/src/assets/imgs/background.jpg');
     background-size: cover;
+    height: 100vh;
+    padding: 80px;
 }
 
 // Adds black opacity overlay on top of the body background image
@@ -35,8 +40,6 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    height: 100vh;
-    padding: 60px;
 }
 
 .container--left {
@@ -96,18 +99,6 @@ main {
 .weather__img {
     width: 100px;
     margin-bottom: 16px;
-}
-
-.container--bottom {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12.5%;
-    flex-basis: 100%;
-}
-
-.next-7-days {
-    flex-basis: 100%;
-    margin-bottom: 30px;
 }
 
 #search {
@@ -183,4 +174,55 @@ main {
 .chance-of-precip__img,
 .wind-speed__img {
     width: 30px;
+}
+
+.container--bottom {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.next-7-days {
+    position: absolute;
+    top: -63px;
+    left: 0;
+    font-size: 15px;
+    border: 2px solid white;
+    padding: 6px 12px;
+    flex-basis: 100%;
+    margin-bottom: 30px;
+}
+
+.monday,
+.tuesday,
+.wednesday,
+.thursday,
+.friday,
+.saturday,
+.sunday {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.monday__temperature,
+.tuesday__temperature,
+.wednesday__temperature,
+.thursday__temperature,
+.friday__temperature,
+.saturday__temperature,
+.sunday__temperature {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.monday__img,
+.tuesday__img,
+.wednesday__img,
+.thursday__img,
+.friday__img,
+.saturday__img,
+.sunday__img {
+    width: 65px;
 }

@@ -3,9 +3,9 @@ const switchBtn = document.getElementById('switch');
 const search = document.getElementById('search');
 
 form.addEventListener('submit', fetchWeather);
-switchBtn.addEventListener('change', kurcina);
+switchBtn.addEventListener('change', switchUnits);
 
-function kurcina() {
+function switchUnits() {
     let url;
 
     if (switchBtn.checked) {
@@ -22,7 +22,13 @@ function kurcina() {
 function fetchWeather(e) {
     e.preventDefault();
 
-    const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=metric&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+    let url;
+
+    if (switchBtn.checked) {
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=us&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+    } else {
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=metric&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+    }
 
     generateWeatherInfoLeft(url);
     generateWeatherInfoRight(url);
@@ -153,8 +159,6 @@ function generateWeatherInfoLeft(url) {
 function generateWeatherInfoRight(url) {
     const feelsLikeTemperature = document.querySelector('.feels-like__temperature');
     const humidityPercentage = document.querySelector('.humidity__percentage');
-    const chanceOfPrecipTitle = document.querySelector('.chance-of-precip__title');
-    const chanceOfPrecipPercentage = document.querySelector('.chance-of-precip__percentage');
     const windSpeed = document.querySelector('.wind-speed__speed');
 
     const metricUnitTemperature = switchBtn.checked ? ' °F' : ' °C';
@@ -166,12 +170,18 @@ function generateWeatherInfoRight(url) {
             feelsLikeTemperature.textContent = response.days[0].feelslike + metricUnitTemperature;
             humidityPercentage.textContent = response.days[0].humidity + ' %';
             windSpeed.textContent = response.days[0].windspeed + metricUnitSpeed;
-            chanceOfPrecipPercentage.textContent = response.days[0].precipprob + ' %';
 
+            if (response.days[1].preciptype === null) return;
+
+            const chanceOfPrecipTitle = document.querySelector('.chance-of-precip__title');
+            const chanceOfPrecipPercentage = document.querySelector(
+                '.chance-of-precip__percentage'
+            );
             const upperCasedTitle = response.days[0].preciptype[0].toUpperCase();
             const capitalizedTitle = upperCasedTitle[0] + response.days[0].preciptype[0].slice(1);
 
             chanceOfPrecipTitle.textContent = `Chance of ${capitalizedTitle}`;
+            chanceOfPrecipPercentage.textContent = response.days[0].precipprob + ' %';
         })
         .catch((error) => console.log(error));
 }

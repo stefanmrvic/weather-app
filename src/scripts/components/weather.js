@@ -1,19 +1,27 @@
 const form = document.querySelector('.form');
 const switchBtn = document.getElementById('switch');
 const search = document.getElementById('search');
+const searchBtn = document.getElementById('searchBtn');
 
 form.addEventListener('submit', fetchWeather);
+searchBtn.addEventListener('click', fetchWeather);
 switchBtn.addEventListener('change', switchUnits);
 
+// Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
+let lastCitySearched;
+
 function switchUnits() {
-    if (!search.value) return;
+    // Exits early if search bar is empty and it doesn't have the record of the user's city
+    if (!search.value && !lastCitySearched) return;
+
+    const searchParam = search.value ? search.value : lastCitySearched;
 
     let url;
 
     if (switchBtn.checked) {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=us&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchParam}/next7days?unitGroup=us&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
     } else {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=metric&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchParam}/next7days?unitGroup=metric&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
     }
 
     generateWeatherInfoLeft(url);
@@ -23,6 +31,9 @@ function switchUnits() {
 
 function fetchWeather(e) {
     e.preventDefault();
+
+    // Exits early if search bar is empty
+    if (!search.value) return;
 
     let url;
 
@@ -150,6 +161,9 @@ function generateWeatherInfoLeft(url) {
             weatherTime.textContent = `${hour}:${minutes}`;
             weatherTemperature.textContent = response.days[0].temp + metricUnitTemperature;
 
+            // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
+            lastCitySearched = weatherCity.textContent;
+
             const weatherIcon = findWeatherImage(response.days[0].icon);
             import(`/src/assets/SVG/${weatherIcon}.svg`).then((src) => {
                 weatherImg.src = src.default;
@@ -173,7 +187,7 @@ function generateWeatherInfoRight(url) {
             humidityPercentage.textContent = response.days[0].humidity + ' %';
             windSpeed.textContent = response.days[0].windspeed + metricUnitSpeed;
 
-            if (response.days[1].preciptype === null) return;
+            if (response.days[0].preciptype === null) return;
 
             const chanceOfPrecipTitle = document.querySelector('.chance-of-precip__title');
             const chanceOfPrecipPercentage = document.querySelector(
@@ -194,6 +208,8 @@ function getUserCity() {
     return fetch(url, { mode: 'cors' })
         .then((response) => response.json())
         .then((response) => {
+            // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
+            lastCitySearched = response.city;
             return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${response.city}/next7days?unitGroup=metric&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
         })
         .catch((error) => console.log(error));

@@ -3,7 +3,13 @@ const switchBtn = document.getElementById('switch');
 const search = document.getElementById('search');
 const searchBtn = document.getElementById('searchBtn');
 
+let searchValue;
+
 form.addEventListener('submit', fetchWeather);
+search.addEventListener('input', () => {
+    searchValue = search.value.trim();
+    console.log(searchValue.length);
+});
 searchBtn.addEventListener('click', fetchWeather);
 switchBtn.addEventListener('change', switchUnits);
 
@@ -23,9 +29,9 @@ function fetchResults(url) {
 
 function switchUnits() {
     // Exits early if search bar is empty and it doesn't have the record of the user's city
-    if (!search.value && !lastCitySearched) return;
+    if (!searchValue && !lastCitySearched) return;
 
-    const searchParam = search.value ? search.value : lastCitySearched;
+    const searchParam = searchValue ? searchValue : lastCitySearched;
 
     let url;
 
@@ -46,14 +52,14 @@ function fetchWeather(e) {
     e.preventDefault();
 
     // Exits early if search bar is empty
-    if (!search.value) return;
+    if (!searchValue) return;
 
     let url;
 
     if (switchBtn.checked) {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=us&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchValue}/next7days?unitGroup=us&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
     } else {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchValue}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
     }
 
     fetchResults(url).then(() => {
@@ -217,7 +223,7 @@ function setInitialState() {
         })
         .then(() => {
             const city = document.querySelector('.weather__city').textContent;
-            search.value = city;
+            searchValue = city;
         });
 
     const promise3 = promise1.then(() => {

@@ -10,6 +10,17 @@ switchBtn.addEventListener('change', switchUnits);
 // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
 let lastCitySearched;
 
+// Storing successful response from the server to prevent reduntant/multiple fetch requests in order to populate different sections of app
+let cachedFetchResult;
+
+// Creating fetchResults function in order to store promise results into variable so I can reuse it in multiple components across the app
+function fetchResults(url) {
+    return fetch(url, { mode: 'cors' })
+        .then((response) => response.json())
+        .then((response) => (cachedFetchResult = response))
+        .catch((error) => console.log(error));
+}
+
 function switchUnits() {
     // Exits early if search bar is empty and it doesn't have the record of the user's city
     if (!search.value && !lastCitySearched) return;
@@ -19,14 +30,16 @@ function switchUnits() {
     let url;
 
     if (switchBtn.checked) {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchParam}/next7days?unitGroup=us&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchParam}/next7days?unitGroup=us&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
     } else {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchParam}/next7days?unitGroup=metric&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchParam}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
     }
 
-    generateWeatherInfoLeft(url);
-    generateWeatherInfoRight(url);
-    generateNext7Days(url);
+    fetchResults(url).then(() => {
+        generateWeatherInfoLeft();
+        generateWeatherInfoRight();
+        generateNext7Days();
+    });
 }
 
 function fetchWeather(e) {
@@ -38,14 +51,16 @@ function fetchWeather(e) {
     let url;
 
     if (switchBtn.checked) {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=us&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=us&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
     } else {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=metric&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${search.value}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
     }
 
-    generateWeatherInfoLeft(url);
-    generateWeatherInfoRight(url);
-    generateNext7Days(url);
+    fetchResults(url).then(() => {
+        generateWeatherInfoLeft();
+        generateWeatherInfoRight();
+        generateNext7Days();
+    });
 }
 
 // Logic for populating images (if/else ifs)
@@ -72,7 +87,7 @@ function findWeatherImage(icon) {
     return icons[icon];
 }
 
-function generateNext7Days(url) {
+function generateNext7Days() {
     const mondayTemperature = document.querySelector('.monday__temperature');
     const mondayImg = document.querySelector('.monday__img');
     const tuesdayTemperature = document.querySelector('.tuesday__temperature');
@@ -90,55 +105,38 @@ function generateNext7Days(url) {
 
     const metricUnit = switchBtn.checked ? ' °F' : ' °C';
 
-    return fetch(url, { mode: 'cors' })
-        .then((response) => response.json())
-        .then((response) => {
-            const mondayIcon = findWeatherImage(response.days[0].icon);
-            import(`/src/assets/SVG/${mondayIcon}.svg`).then(
-                (src) => (mondayImg.src = src.default)
-            );
-            mondayTemperature.textContent = response.days[0].temp + metricUnit;
+    const mondayIcon = findWeatherImage(cachedFetchResult.days[0].icon);
+    import(`/src/assets/SVG/${mondayIcon}.svg`).then((src) => (mondayImg.src = src.default));
+    mondayTemperature.textContent = cachedFetchResult.days[0].temp + metricUnit;
 
-            const tuesdayIcon = findWeatherImage(response.days[1].icon);
-            import(`/src/assets/SVG/${tuesdayIcon}.svg`).then(
-                (src) => (tuesdayImg.src = src.default)
-            );
-            tuesdayTemperature.textContent = response.days[1].temp + metricUnit;
+    const tuesdayIcon = findWeatherImage(cachedFetchResult.days[1].icon);
+    import(`/src/assets/SVG/${tuesdayIcon}.svg`).then((src) => (tuesdayImg.src = src.default));
+    tuesdayTemperature.textContent = cachedFetchResult.days[1].temp + metricUnit;
 
-            const wednesdayIcon = findWeatherImage(response.days[2].icon);
-            import(`/src/assets/SVG/${wednesdayIcon}.svg`).then(
-                (src) => (wednesdayImg.src = src.default)
-            );
-            wednesdayTemperature.textContent = response.days[2].temp + metricUnit;
+    const wednesdayIcon = findWeatherImage(cachedFetchResult.days[2].icon);
+    import(`/src/assets/SVG/${wednesdayIcon}.svg`).then((src) => (wednesdayImg.src = src.default));
+    wednesdayTemperature.textContent = cachedFetchResult.days[2].temp + metricUnit;
 
-            const thursdayIcon = findWeatherImage(response.days[3].icon);
-            import(`/src/assets/SVG/${thursdayIcon}.svg`).then(
-                (src) => (thursdayImg.src = src.default)
-            );
-            thursdayTemperature.textContent = response.days[3].temp + metricUnit;
+    const thursdayIcon = findWeatherImage(cachedFetchResult.days[3].icon);
+    import(`/src/assets/SVG/${thursdayIcon}.svg`).then((src) => (thursdayImg.src = src.default));
+    thursdayTemperature.textContent = cachedFetchResult.days[3].temp + metricUnit;
 
-            const fridayIcon = findWeatherImage(response.days[4].icon);
-            import(`/src/assets/SVG/${fridayIcon}.svg`).then(
-                (src) => (fridayImg.src = src.default)
-            );
-            fridayTemperature.textContent = response.days[4].temp + metricUnit;
+    const fridayIcon = findWeatherImage(cachedFetchResult.days[4].icon);
+    import(`/src/assets/SVG/${fridayIcon}.svg`).then((src) => (fridayImg.src = src.default));
+    fridayTemperature.textContent = cachedFetchResult.days[4].temp + metricUnit;
 
-            const saturdayIcon = findWeatherImage(response.days[5].icon);
-            import(`/src/assets/SVG/${saturdayIcon}.svg`).then(
-                (src) => (saturdayImg.src = src.default)
-            );
-            saturdayTemperature.textContent = response.days[5].temp + metricUnit;
+    const saturdayIcon = findWeatherImage(cachedFetchResult.days[5].icon);
+    import(`/src/assets/SVG/${saturdayIcon}.svg`).then((src) => (saturdayImg.src = src.default));
+    saturdayTemperature.textContent = cachedFetchResult.days[5].temp + metricUnit;
 
-            const sundayIcon = findWeatherImage(response.days[6].icon);
-            import(`/src/assets/SVG/${sundayIcon}.svg`).then((src) => {
-                sundayImg.src = src.default;
-            });
-            sundayTemperature.textContent = response.days[6].temp + metricUnit;
-        })
-        .catch((error) => console.log(error));
+    const sundayIcon = findWeatherImage(cachedFetchResult.days[6].icon);
+    import(`/src/assets/SVG/${sundayIcon}.svg`).then((src) => {
+        sundayImg.src = src.default;
+    });
+    sundayTemperature.textContent = cachedFetchResult.days[6].temp + metricUnit;
 }
 
-function generateWeatherInfoLeft(url) {
+function generateWeatherInfoLeft() {
     const weatherConditions = document.querySelector('.weather__conditions');
     const weatherCity = document.querySelector('.weather__city');
     const weatherDate = document.querySelector('.weather__date');
@@ -152,27 +150,23 @@ function generateWeatherInfoLeft(url) {
     const hour = currentTime.getHours();
     const minutes = currentTime.getMinutes();
 
-    return fetch(url, { mode: 'cors' })
-        .then((response) => response.json())
-        .then((response) => {
-            weatherConditions.textContent = response.days[0].conditions;
-            weatherCity.textContent = response.resolvedAddress.split(',')[0];
-            weatherDate.textContent = response.days[0].datetime;
-            weatherTime.textContent = `${hour}:${minutes}`;
-            weatherTemperature.textContent = response.days[0].temp + metricUnitTemperature;
+    weatherConditions.textContent = cachedFetchResult.days[0].conditions;
+    weatherCity.textContent = cachedFetchResult.resolvedAddress.split(',')[0];
+    weatherDate.textContent = cachedFetchResult.days[0].datetime;
+    weatherTime.textContent = `${hour}:${minutes}`;
+    weatherTemperature.textContent = cachedFetchResult.days[0].temp + metricUnitTemperature;
 
-            // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
-            lastCitySearched = weatherCity.textContent;
+    // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
+    lastCitySearched = weatherCity.textContent;
 
-            const weatherIcon = findWeatherImage(response.days[0].icon);
-            import(`/src/assets/SVG/${weatherIcon}.svg`).then((src) => {
-                weatherImg.src = src.default;
-            });
-        })
-        .catch((error) => console.log(error));
+    const weatherIcon = findWeatherImage(cachedFetchResult.days[0].icon);
+    import(`/src/assets/SVG/${weatherIcon}.svg`).then((src) => {
+        weatherImg.src = src.default;
+    });
 }
 
-function generateWeatherInfoRight(url) {
+function generateWeatherInfoRight() {
+    console.log(cachedFetchResult);
     const feelsLikeTemperature = document.querySelector('.feels-like__temperature');
     const humidityPercentage = document.querySelector('.humidity__percentage');
     const windSpeed = document.querySelector('.wind-speed__speed');
@@ -180,26 +174,19 @@ function generateWeatherInfoRight(url) {
     const metricUnitTemperature = switchBtn.checked ? ' °F' : ' °C';
     const metricUnitSpeed = switchBtn.checked ? ' mi/h' : ' km/h';
 
-    return fetch(url, { mode: 'cors' })
-        .then((response) => response.json())
-        .then((response) => {
-            feelsLikeTemperature.textContent = response.days[0].feelslike + metricUnitTemperature;
-            humidityPercentage.textContent = response.days[0].humidity + ' %';
-            windSpeed.textContent = response.days[0].windspeed + metricUnitSpeed;
+    feelsLikeTemperature.textContent = cachedFetchResult.days[0].feelslike + metricUnitTemperature;
+    humidityPercentage.textContent = cachedFetchResult.days[0].humidity + ' %';
+    windSpeed.textContent = cachedFetchResult.days[0].windspeed + metricUnitSpeed;
 
-            if (response.days[0].preciptype === null) return;
+    if (cachedFetchResult.days[0].preciptype === null) return;
 
-            const chanceOfPrecipTitle = document.querySelector('.chance-of-precip__title');
-            const chanceOfPrecipPercentage = document.querySelector(
-                '.chance-of-precip__percentage'
-            );
-            const upperCasedTitle = response.days[0].preciptype[0].toUpperCase();
-            const capitalizedTitle = upperCasedTitle[0] + response.days[0].preciptype[0].slice(1);
+    const chanceOfPrecipTitle = document.querySelector('.chance-of-precip__title');
+    const chanceOfPrecipPercentage = document.querySelector('.chance-of-precip__percentage');
+    const upperCasedTitle = cachedFetchResult.days[0].preciptype[0].toUpperCase();
+    const capitalizedTitle = upperCasedTitle[0] + cachedFetchResult.days[0].preciptype[0].slice(1);
 
-            chanceOfPrecipTitle.textContent = `Chance of ${capitalizedTitle}`;
-            chanceOfPrecipPercentage.textContent = response.days[0].precipprob + ' %';
-        })
-        .catch((error) => console.log(error));
+    chanceOfPrecipTitle.textContent = `Chance of ${capitalizedTitle}`;
+    chanceOfPrecipPercentage.textContent = cachedFetchResult.days[0].precipprob + ' %';
 }
 
 function getUserCity() {
@@ -210,7 +197,7 @@ function getUserCity() {
         .then((response) => {
             // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
             lastCitySearched = response.city;
-            return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${response.city}/next7days?unitGroup=metric&include=days&key=VW8W64XT9LC76PU8YQRCKY85J&contentType=json`;
+            return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${response.city}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
         })
         .catch((error) => console.log(error));
 }
@@ -220,21 +207,25 @@ function setInitialState() {
         resolve(getUserCity());
     });
 
-    const promise1 = promise
-        .then((url) => {
-            return generateWeatherInfoLeft(url);
+    const promise1 = promise.then((url) => {
+        return fetchResults(url);
+    });
+
+    const promise2 = promise1
+        .then(() => {
+            return generateWeatherInfoLeft();
         })
         .then(() => {
             const city = document.querySelector('.weather__city').textContent;
             search.value = city;
         });
 
-    const promise2 = promise.then((url) => {
-        return generateWeatherInfoRight(url);
+    const promise3 = promise1.then(() => {
+        return generateWeatherInfoRight();
     });
 
-    const promise3 = promise.then((url) => {
-        return generateNext7Days(url);
+    const promise4 = promise1.then(() => {
+        return generateNext7Days();
     });
 
     //Promise.all([promise1, promise2, promise3]).then(() => {});

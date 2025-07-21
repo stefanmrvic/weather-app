@@ -6,7 +6,6 @@
     <title>Weather App</title>
 </head>
 <body>
-
     <main>
         <div class="container--left">
             <div class="weather__info">
@@ -17,14 +16,19 @@
             </div>
             <div class="weather__temperature">
                 <h1 id="temperature"></h1>
-                <p class="toggle__headline">Display temperature in:</p>
 
-                <span>°C</span>
-                <label class="switch" for="switch">
-                    <input type="checkbox" id="switch">
-                    <span class="slider"></span>
-                </label>
-                <span>°F</span>
+                <!-- Start of Switch button section for metric/imperial units -->
+                <div class="weather__units">
+                    <p class="weather__units-text">Display temperature in:</p>
+                    <span class="celsius">°C</span>
+                    <label class="switch" for="switch">
+                        <input type="checkbox" id="switch">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="fahrenheit">°F</span>
+                </div>
+                <!-- End of Switch button section for metric/imperial units -->
+
             </div>
             <div class="weather__img">
                 <img src="#" alt="weather icon" id="icon">

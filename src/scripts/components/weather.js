@@ -6,6 +6,8 @@ form.addEventListener('submit', fetchWeather);
 switchBtn.addEventListener('change', switchUnits);
 
 function switchUnits() {
+    if (!search.value) return;
+
     let url;
 
     if (switchBtn.checked) {

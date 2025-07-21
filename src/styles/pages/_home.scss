@@ -24,7 +24,9 @@ span {
 }
 
 main,
-.container {
+.container--left,
+.conatiner--right,
+.container--bottom {
     position: relative;
     z-index: 2;
 }
@@ -37,9 +39,63 @@ main {
     padding: 60px;
 }
 
-.container {
+.container--left {
+}
+
+.weather__conditions {
+    font-size: 35px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.weather__city {
+    font-size: 23px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.weather__date {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.weather__time {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+#temperature {
+    font-size: 55px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    margin-bottom: 20px;
+}
+
+.weather__units {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.weather__units-text {
+    margin-bottom: 10px;
+    flex-basis: 100%;
+}
+
+.celsius {
+    margin-right: 5px;
+}
+
+.fahrenheit {
+    margin-left: 5px;
+}
+
+.weather__img {
+    width: 100px;
+    margin-bottom: 16px;
 }
 
 .container--bottom {

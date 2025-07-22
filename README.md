@@ -3,6 +3,11 @@
 
 This is a simple weather app built as part of my practice with asynchronous JavaScript, fetching APIs, and DOM manipulation. The app allows users to input a location and retrieves real-time weather data using the OpenWeather API.
 
+
+<img width="2556" height="1282" alt="app_screenshot" src="https://github.com/user-attachments/assets/326b6056-f792-4942-aca9-f10fcdbc5bb5" />
+
+
+
 **🛠️ Features**
 * Input form to search weather by city name
 * Fetches live weather data using fetch with async/await

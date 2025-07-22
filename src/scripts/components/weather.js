@@ -17,14 +17,16 @@ let lastCitySearched;
 let cachedFetchResult;
 
 // Creating fetchResults function in order to store promise results into variable so I can reuse it in multiple components across the app
-function fetchResults(url) {
-    return fetch(url, { mode: 'cors' })
-        .then((response) => response.json())
-        .then((response) => (cachedFetchResult = response))
-        .catch((error) => console.log(error));
+async function fetchResults(url) {
+    const fetchResult = await fetch(url, { mode: 'cors' });
+    const fetchedJSON = await fetchResult.json();
+
+    if (!fetchedJSON) throw new Error('THERE WAS AN ERROR FETCHING THE REQUESTED URL!');
+
+    cachedFetchResult = fetchedJSON;
 }
 
-function switchUnits() {
+async function switchUnits() {
     // Exits early if search bar is empty and it doesn't have the record of the user's city
     if (!searchValue && !lastCitySearched) return;
 
@@ -38,14 +40,14 @@ function switchUnits() {
         url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchParam}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
     }
 
-    fetchResults(url).then(() => {
-        generateWeatherInfoLeft();
-        generateWeatherInfoRight();
-        generateNext7Days();
-    });
+    await fetchResults(url);
+
+    generateWeatherInfoLeft();
+    generateWeatherInfoRight();
+    generateNext7Days();
 }
 
-function fetchWeather(e) {
+async function fetchWeather(e) {
     e.preventDefault();
 
     // Exits early if search bar is empty
@@ -59,14 +61,14 @@ function fetchWeather(e) {
         url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchValue}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
     }
 
-    fetchResults(url).then(() => {
-        generateWeatherInfoLeft();
-        generateWeatherInfoRight();
-        generateNext7Days();
-    });
+    await fetchResults(url);
+
+    generateWeatherInfoLeft();
+    generateWeatherInfoRight();
+    generateNext7Days();
 }
 
-// Logic for populating images (if/else ifs)
+// Logic for populating images
 function findWeatherImage(icon) {
     const icons = {
         snow: './assets/SVG/snow.svg',
@@ -90,7 +92,7 @@ function findWeatherImage(icon) {
     return icons[icon];
 }
 
-function generateNext7Days() {
+async function generateNext7Days() {
     const mondayTemperature = document.querySelector('.monday__temperature');
     const mondayImg = document.querySelector('.monday__img');
     const tuesdayTemperature = document.querySelector('.tuesday__temperature');
@@ -109,37 +111,44 @@ function generateNext7Days() {
     const metricUnit = switchBtn.checked ? ' °F' : ' °C';
 
     const mondayIcon = findWeatherImage(cachedFetchResult.days[0].icon);
-    import(`/src/assets/SVG/${mondayIcon}.svg`).then((src) => (mondayImg.src = src.default));
+    const mondayImgSrc = await import(`/src/assets/SVG/${mondayIcon}.svg`);
+    mondayImg.src = mondayImgSrc.default;
     mondayTemperature.textContent = cachedFetchResult.days[0].temp + metricUnit;
 
     const tuesdayIcon = findWeatherImage(cachedFetchResult.days[1].icon);
-    import(`/src/assets/SVG/${tuesdayIcon}.svg`).then((src) => (tuesdayImg.src = src.default));
+    const tuesdayImgSrc = await import(`/src/assets/SVG/${tuesdayIcon}.svg`);
+    tuesdayImg.src = tuesdayImgSrc.default;
     tuesdayTemperature.textContent = cachedFetchResult.days[1].temp + metricUnit;
 
     const wednesdayIcon = findWeatherImage(cachedFetchResult.days[2].icon);
-    import(`/src/assets/SVG/${wednesdayIcon}.svg`).then((src) => (wednesdayImg.src = src.default));
+    const wednesdayImgSrc = await import(`/src/assets/SVG/${wednesdayIcon}.svg`);
+    wednesdayImg.src = wednesdayImgSrc.default;
     wednesdayTemperature.textContent = cachedFetchResult.days[2].temp + metricUnit;
 
     const thursdayIcon = findWeatherImage(cachedFetchResult.days[3].icon);
-    import(`/src/assets/SVG/${thursdayIcon}.svg`).then((src) => (thursdayImg.src = src.default));
+    const thursdayImgSrc = await import(`/src/assets/SVG/${thursdayIcon}.svg`);
+    thursdayImg.src = thursdayImgSrc.default;
     thursdayTemperature.textContent = cachedFetchResult.days[3].temp + metricUnit;
 
     const fridayIcon = findWeatherImage(cachedFetchResult.days[4].icon);
-    import(`/src/assets/SVG/${fridayIcon}.svg`).then((src) => (fridayImg.src = src.default));
+    const fridayImgSrc = await import(`/src/assets/SVG/${fridayIcon}.svg`);
+    fridayImg.src = fridayImgSrc.default;
     fridayTemperature.textContent = cachedFetchResult.days[4].temp + metricUnit;
 
     const saturdayIcon = findWeatherImage(cachedFetchResult.days[5].icon);
-    import(`/src/assets/SVG/${saturdayIcon}.svg`).then((src) => (saturdayImg.src = src.default));
+    const saturdayImgSrc = await import(`/src/assets/SVG/${saturdayIcon}.svg`);
+    saturdayImg.src = saturdayImgSrc.default;
     saturdayTemperature.textContent = cachedFetchResult.days[5].temp + metricUnit;
 
     const sundayIcon = findWeatherImage(cachedFetchResult.days[6].icon);
-    import(`/src/assets/SVG/${sundayIcon}.svg`).then((src) => {
-        sundayImg.src = src.default;
-    });
+    const sundayImgSrc = await import(`/src/assets/SVG/${sundayIcon}.svg`);
+    sundayImg.src = sundayImgSrc.default;
     sundayTemperature.textContent = cachedFetchResult.days[6].temp + metricUnit;
+
+    console.log('generateNext7Days - done!');
 }
 
-function generateWeatherInfoLeft() {
+async function generateWeatherInfoLeft() {
     const weatherConditions = document.querySelector('.weather__conditions');
     const weatherCity = document.querySelector('.weather__city');
     const weatherDate = document.querySelector('.weather__date');
@@ -163,13 +172,17 @@ function generateWeatherInfoLeft() {
     lastCitySearched = weatherCity.textContent;
 
     const weatherIcon = findWeatherImage(cachedFetchResult.days[0].icon);
-    import(`/src/assets/SVG/${weatherIcon}.svg`).then((src) => {
-        weatherImg.src = src.default;
+    const weatherIconSrc = await import(`/src/assets/SVG/${weatherIcon}.svg`);
+    weatherImg.src = weatherIconSrc.default;
+
+    //console.log('generateWeatherInfoLeft - done!');
+
+    await new Promise((resolve) => {
+        setTimeout(() => resolve(console.log('done after 3 seconds... ehaa!')), 3000);
     });
 }
 
-function generateWeatherInfoRight() {
-    console.log(cachedFetchResult);
+async function generateWeatherInfoRight() {
     const feelsLikeTemperature = document.querySelector('.feels-like__temperature');
     const humidityPercentage = document.querySelector('.humidity__percentage');
     const windSpeed = document.querySelector('.wind-speed__speed');
@@ -190,48 +203,43 @@ function generateWeatherInfoRight() {
 
     chanceOfPrecipTitle.textContent = `Chance of ${capitalizedTitle}`;
     chanceOfPrecipPercentage.textContent = cachedFetchResult.days[0].precipprob + ' %';
+
+    console.log('generateWeatherInfoRight - done!');
 }
 
-function getUserCity() {
+async function getUserCity() {
     const url = 'https://geolocation-db.com/json/';
 
-    return fetch(url, { mode: 'cors' })
-        .then((response) => response.json())
-        .then((response) => {
-            // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
-            lastCitySearched = response.city;
-            return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${response.city}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
-        })
-        .catch((error) => console.log(error));
+    const fetchResult = await fetch(url, { mode: 'cors' });
+    const fetchedJSON = await fetchResult.json();
+
+    // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
+    lastCitySearched = fetchedJSON.city;
+
+    return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${fetchedJSON.city}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
 }
 
-function setInitialState() {
-    const promise = new Promise((resolve) => {
-        resolve(getUserCity());
-    });
+async function setInitialState() {
+    const url = await getUserCity();
+    await fetchResults(url);
 
-    const promise1 = promise.then((url) => {
-        return fetchResults(url);
-    });
+    // const promise1 = generateWeatherInfoLeft();
+    // const promise2 = generateWeatherInfoRight();
+    // const promise3 = generateNext7Days();
 
-    const promise2 = promise1
-        .then(() => {
-            return generateWeatherInfoLeft();
-        })
-        .then(() => {
-            const city = document.querySelector('.weather__city').textContent;
-            searchValue = city;
-        });
+    await Promise.all([generateWeatherInfoLeft(), generateWeatherInfoRight(), generateNext7Days()]);
 
-    const promise3 = promise1.then(() => {
-        return generateWeatherInfoRight();
-    });
+    revealContent();
+}
 
-    const promise4 = promise1.then(() => {
-        return generateNext7Days();
-    });
+async function revealContent() {
+    const main = document.querySelector('main');
+    const containerBottom = document.querySelector('.container--bottom');
+    const loader = document.querySelector('.loader__wrapper');
 
-    //Promise.all([promise1, promise2, promise3]).then(() => {});
+    main.classList.add('reveal');
+    containerBottom.classList.add('reveal');
+    loader.style.display = 'none';
 }
 
 setInitialState();

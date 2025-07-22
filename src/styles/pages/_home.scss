@@ -513,3 +513,17 @@ main {
         width: 65px;
     }
 }
+
+main,
+.container--bottom {
+    // Initially hides all content until the page is first loaded/populated
+    display: none;
+}
+
+.reveal {
+    display: flex;
+}
+
+.hide {
+    display: none;
+}

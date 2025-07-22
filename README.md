@@ -31,3 +31,6 @@ This is a simple weather app built as part of my practice with asynchronous Java
 2. Open index.html in your browser
 3. Enter a city name and press submit
 4. View the weather data instantly!
+
+**🚀 Note**
+I have intentionally added 3 seconds delay so that you have enough time to see the cool loading animation.

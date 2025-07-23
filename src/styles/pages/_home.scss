@@ -273,6 +273,15 @@ main {
     position: relative;
 }
 
+.error__msg {
+    display: none;
+    position: absolute;
+    bottom: 39px;
+    left: 2px;
+    font-size: 15px;
+    color: red;
+}
+
 .container--right {
     display: flex;
     flex-direction: column;

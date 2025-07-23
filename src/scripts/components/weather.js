@@ -1,14 +1,17 @@
+import { buildURL } from '../utils/api.js';
+import { showError, hideError } from '../utils/errorHandler.js';
+
 const form = document.querySelector('.form');
 const switchBtn = document.getElementById('switch');
 const search = document.getElementById('search');
 const searchBtn = document.getElementById('searchBtn');
 
-let searchValue;
+let searchedCity;
 
 form.addEventListener('submit', fetchWeather);
-search.addEventListener('input', () => (searchValue = search.value.trim()));
+search.addEventListener('input', () => (searchedCity = search.value.trim()));
 searchBtn.addEventListener('click', fetchWeather);
-switchBtn.addEventListener('change', switchUnits);
+switchBtn.addEventListener('change', fetchWeather);
 
 // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
 let lastCitySearched;
@@ -16,52 +19,62 @@ let lastCitySearched;
 // Storing successful response from the server to prevent reduntant/multiple fetch requests in order to populate different sections of app
 let cachedFetchResult;
 
-// Creating fetchResults function in order to store promise results into variable so I can reuse it in multiple components across the app
+// Creating fetchResults function in order to store promise results into variable so I can cache it for multiple components across the app
 async function fetchResults(url) {
-    const fetchResult = await fetch(url, { mode: 'cors' });
-    const fetchedJSON = await fetchResult.json();
+    let fetchResult;
 
-    if (!fetchedJSON) throw new Error('THERE WAS AN ERROR FETCHING THE REQUESTED URL!');
+    try {
+        fetchResult = await fetch(url, { mode: 'cors' });
 
-    cachedFetchResult = fetchedJSON;
-}
+        if (!fetchResult) throw new Error('Error: Unable to fetch the requested URL!');
 
-async function switchUnits() {
-    // Exits early if search bar is empty and it doesn't have the record of the user's city
-    if (!searchValue && !lastCitySearched) return;
+        const fetchedJSON = await fetchResult.json();
+        cachedFetchResult = fetchedJSON;
+        hideError();
+        return fetchResult;
+    } catch (err) {
+        // Checks if fetching was successful and t
+        if (!fetchResult) {
+            showError('Error: Network issue or server is unavailable!');
+            return;
+        }
 
-    const searchParam = searchValue ? searchValue : lastCitySearched;
+        // Trying to catch all possible errors by following their API documentation here:
+        // https://www.visualcrossing.com/resources/documentation/weather-api/timeline-weather-api/#response-codes
+        switch (fetchResult.status) {
+            case 400:
+            case 404:
+                showError('Error: Searched City Not Found!');
+                break;
+            case 401:
+                showError('Error: Unauthorized operation!');
+                break;
+            case 429:
+                showError('Error: The account has exceeded their daily limit!');
+                break;
+            default:
+                showError('Error: Uh oh, something went wrong. Try again!');
+        }
 
-    let url;
-
-    if (switchBtn.checked) {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchParam}/next7days?unitGroup=us&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
-    } else {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchParam}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
+        console.log(err);
+        throw new Error(err);
     }
-
-    await fetchResults(url);
-
-    generateWeatherInfoLeft();
-    generateWeatherInfoRight();
-    generateNext7Days();
 }
 
 async function fetchWeather(e) {
+    // Prevents form from submitting and reloading the page
     e.preventDefault();
 
-    // Exits early if search bar is empty
-    if (!searchValue) return;
+    // Exits early if search bar is empty and it doesn't have the record of the user's city
+    if (!searchedCity && !lastCitySearched) return;
 
-    let url;
+    const searchParam = searchedCity ? searchedCity : lastCitySearched;
 
-    if (switchBtn.checked) {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchValue}/next7days?unitGroup=us&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
-    } else {
-        url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchValue}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
-    }
+    let url = buildURL(searchParam);
 
-    await fetchResults(url);
+    const result = await fetchResults(url);
+
+    if (!result) throw new Error('Error: Unable to fetch the requested URL!');
 
     generateWeatherInfoLeft();
     generateWeatherInfoRight();
@@ -144,8 +157,6 @@ async function generateNext7Days() {
     const sundayImgSrc = await import(`/src/assets/SVG/${sundayIcon}.svg`);
     sundayImg.src = sundayImgSrc.default;
     sundayTemperature.textContent = cachedFetchResult.days[6].temp + metricUnit;
-
-    console.log('generateNext7Days - done!');
 }
 
 async function generateWeatherInfoLeft() {
@@ -173,12 +184,13 @@ async function generateWeatherInfoLeft() {
 
     const weatherIcon = findWeatherImage(cachedFetchResult.days[0].icon);
     const weatherIconSrc = await import(`/src/assets/SVG/${weatherIcon}.svg`);
-    weatherImg.src = weatherIconSrc.default;
 
-    //console.log('generateWeatherInfoLeft - done!');
+    // If the initial reading of user data fails, it will fallback to cloudy icon
+    weatherImg.src = weatherIconSrc ? weatherIconSrc.default : `/src/assets/SVG/cloudy.svg`;
 
+    // Putting delay of 2 seconds so that users can see the animation (otherwise it loads instantly and you can't see it)
     await new Promise((resolve) => {
-        setTimeout(() => resolve(console.log('done after 3 seconds... ehaa!')), 3000);
+        setTimeout(() => resolve(console.log('done after 3 seconds... ehaa!')), 2000);
     });
 }
 
@@ -190,46 +202,68 @@ async function generateWeatherInfoRight() {
     const metricUnitTemperature = switchBtn.checked ? ' °F' : ' °C';
     const metricUnitSpeed = switchBtn.checked ? ' mi/h' : ' km/h';
 
+    const chanceOfPrecipTitle = document.querySelector('.chance-of-precip__title');
+    const chanceOfPrecipPercentage = document.querySelector('.chance-of-precip__percentage');
+
     feelsLikeTemperature.textContent = cachedFetchResult.days[0].feelslike + metricUnitTemperature;
     humidityPercentage.textContent = cachedFetchResult.days[0].humidity + ' %';
     windSpeed.textContent = cachedFetchResult.days[0].windspeed + metricUnitSpeed;
 
-    if (cachedFetchResult.days[0].preciptype === null) return;
+    if (cachedFetchResult.days[0].preciptype === null) {
+        chanceOfPrecipTitle.textContent = 'Chance of Rain';
+        chanceOfPrecipPercentage.textContent = '0 %';
+        return;
+    }
 
-    const chanceOfPrecipTitle = document.querySelector('.chance-of-precip__title');
-    const chanceOfPrecipPercentage = document.querySelector('.chance-of-precip__percentage');
-    const upperCasedTitle = cachedFetchResult.days[0].preciptype[0].toUpperCase();
-    const capitalizedTitle = upperCasedTitle[0] + cachedFetchResult.days[0].preciptype[0].slice(1);
+    const title = cachedFetchResult.days[0].preciptype[0];
+    const capitalizedTitle = title[0].toUpperCase() + title.slice(1);
 
     chanceOfPrecipTitle.textContent = `Chance of ${capitalizedTitle}`;
     chanceOfPrecipPercentage.textContent = cachedFetchResult.days[0].precipprob + ' %';
-
-    console.log('generateWeatherInfoRight - done!');
 }
 
 async function getUserCity() {
     const url = 'https://geolocation-db.com/json/';
 
-    const fetchResult = await fetch(url, { mode: 'cors' });
-    const fetchedJSON = await fetchResult.json();
+    try {
+        const fetchResult = await fetch(url, { mode: 'cors' });
+        const fetchedJSON = await fetchResult.json();
 
-    // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
-    lastCitySearched = fetchedJSON.city;
+        if (!fetchResult.ok) throw new Error('Error: Unable to fetch the requested URL!');
 
-    return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${fetchedJSON.city}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
+        // Stores from which city is user so it can convert celsius to fahrenheit and vice-verca when search bar is empty
+        lastCitySearched = fetchedJSON.city;
+
+        return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${fetchedJSON.city}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
+    } catch ({ name, msg }) {
+        throw new Error(`${name}: ${msg}`);
+    }
 }
 
 async function setInitialState() {
-    const url = await getUserCity();
-    await fetchResults(url);
+    // Gathering User Location through Geolocation API and the passing that city into Visual Crossing API to fetch weather data
+    try {
+        const url = await getUserCity();
+        const result = await fetchResults(url);
 
-    // const promise1 = generateWeatherInfoLeft();
-    // const promise2 = generateWeatherInfoRight();
-    // const promise3 = generateNext7Days();
+        if (!result) throw new Error('Error: Unable to fetch the requested URL!');
 
-    await Promise.all([generateWeatherInfoLeft(), generateWeatherInfoRight(), generateNext7Days()]);
+        hideError();
 
-    revealContent();
+        await Promise.all([
+            generateWeatherInfoLeft(),
+            generateWeatherInfoRight(),
+            generateNext7Days(),
+        ]);
+
+        revealContent();
+
+        // If any at step of the process something fails, it informs the user that initialization of data failed and it logs error into console.log
+    } catch (err) {
+        showError('Error: Failed to initialize the data!');
+        console.log(err);
+        revealContent();
+    }
 }
 
 async function revealContent() {

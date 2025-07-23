@@ -54,6 +54,7 @@ export async function fetchResults(url) {
     }
 }
 
+// TODO: separate the concerns (DOM rendering logic) from fetcWeather function
 export async function fetchWeather(e) {
     // Prevents form from submitting and reloading the page.
     e.preventDefault();

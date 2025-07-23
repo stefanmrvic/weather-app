@@ -15,7 +15,8 @@ export async function getUserCity() {
         lastCitySearched.setCity(fetchedJSON.city);
 
         return `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${fetchedJSON.city}/next7days?unitGroup=metric&include=days&key=K3QZSEQW7CN383R6MVUSAPLE2&contentType=json`;
-    } catch ({ name, msg }) {
-        throw new Error(`${name}: ${msg}`);
+    } catch (err) {
+        console.log(err);
+        throw new Error('getUserCity function failed to fetch!');
     }
 }

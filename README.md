@@ -1,5 +1,6 @@
-The Odin Project - JavaScript
-Project: 🌦️ Weather App
+# The Odin Project - JavaScript
+## Project: 🌦️ Weather App
+
 This is a simple weather app built as part of my practice with asynchronous JavaScript, fetching APIs, and DOM manipulation. The app allows users to input a location and retrieves real-time weather data using the OpenWeather API.
 
 <img width="2556" height="1282" alt="weatherApp" src="https://github.com/user-attachments/assets/5cdf2145-7127-4be4-847d-1c76a07f487c" />

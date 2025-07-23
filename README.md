@@ -1,7 +1,9 @@
-# The Odin Project JavaScript
-## Project: 🌦️ Weather App
-
+The Odin Project - JavaScript
+Project: 🌦️ Weather App
 This is a simple weather app built as part of my practice with asynchronous JavaScript, fetching APIs, and DOM manipulation. The app allows users to input a location and retrieves real-time weather data using the OpenWeather API.
+
+<img width="2556" height="1282" alt="weatherApp" src="https://github.com/user-attachments/assets/5cdf2145-7127-4be4-847d-1c76a07f487c" />
+
 
 **🛠️ Features**
 * Input form to search weather by city name
@@ -23,6 +25,6 @@ This is a simple weather app built as part of my practice with asynchronous Java
 
 **🚀 How to Run**
 1. Clone this repo
-2. Open index.html in your browser
-3. Enter a city name and press submit
-4. View the weather data instantly!
+2. ```npm install``` to install the dependencies
+3. ```npm run start``` to start the dev server
+4. Enter the city in the field and press enter or click the button to fetch the data!

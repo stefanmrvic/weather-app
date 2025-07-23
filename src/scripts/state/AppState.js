@@ -1,5 +1,7 @@
-// Module for storing searched city so it can be used when user switches temperature units.
+// Module for managing the app state
 
+// Check if it's the initial page load so that user doesn't have to wait 2 seconds delay that I've added for user to see
+// loading animation when he loads the app for the first time.
 let firstLoad = true;
 
 export const isFirstLoad = {
@@ -7,8 +9,10 @@ export const isFirstLoad = {
     set: (boolean) => (firstLoad = boolean),
 };
 
+// Freezes the object to prevent modifications to its properties or prototype.
 Object.freeze(isFirstLoad);
 
+// Storing what is the current city input value so that it can be used when the user pressed the enter to submit the form.
 let inputedCity;
 
 export const searchedCity = {
@@ -18,7 +22,7 @@ export const searchedCity = {
 
 Object.freeze(searchedCity);
 
-// Stores last searched city so that conversion from celsius to fahrenheit and vice-verca can be done when the search bar is empty.
+// Storing last searched city so that conversion from celsius to fahrenheit and vice-verca can be done when the search bar is empty.
 let lastCity;
 
 export const lastCitySearched = {

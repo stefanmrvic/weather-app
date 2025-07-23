@@ -14,7 +14,7 @@ import './scripts/dom/renderWeatherDetails.js';
 import './scripts/state/AppState.js';
 
 // Utility functions //
-import './scripts/utils/api.js';
+import './scripts/utils/urlBuilder.js';
 import './scripts/utils/dom.js';
 import './scripts/utils/errorHandler.js';
 

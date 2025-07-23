@@ -19,6 +19,7 @@ export async function renderDailyForecast() {
 
     const cachedFetchResults = cachedFetch.getResults();
 
+    // It populates City, Temperature, Date/Time, and Conditions from the fetched JSON object
     weatherConditions.textContent = cachedFetchResults.days[0].conditions;
     weatherCity.textContent = cachedFetchResults.resolvedAddress.split(',')[0];
     weatherDate.textContent = cachedFetchResults.days[0].datetime;

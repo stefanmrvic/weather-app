@@ -44,9 +44,7 @@ async function setInitialState() {
     }
 }
 
-async function revealContent() {
-    // Making this function asynchronous so I can block it for 2 seconds to enable users to see the loading animation at the initial page load
-
+function revealContent() {
     const main = document.querySelector('main');
     const containerBottom = document.querySelector('.container--bottom');
     const loader = document.querySelector('.loader__wrapper');

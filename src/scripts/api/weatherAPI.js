@@ -1,4 +1,4 @@
-import { buildURL } from '../utils/api.js';
+import { buildURL } from '../utils/urlBuilder.js';
 import { showError, hideError } from '../utils/errorHandler.js';
 import { searchedCity, lastCitySearched, cachedFetch } from '../state/AppState.js';
 import { renderDailyForecast } from '../dom/renderDailyForecast.js';

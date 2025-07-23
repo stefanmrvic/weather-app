@@ -23,6 +23,7 @@ export async function renderWeeklyForecast() {
 
     const cachedFetchResults = cachedFetch.getResults();
 
+    // Populating the SVG icons on the bottom section depending if it's rainy, cloudy, sunny, or foggy day from the fetched JSON Object
     const mondayIcon = findWeatherImage(cachedFetchResults.days[0].icon);
     const mondayImgSrc = await import(`/src/assets/SVG/${mondayIcon}.svg`);
     mondayImg.src = mondayImgSrc.default;

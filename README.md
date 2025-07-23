@@ -22,11 +22,12 @@ This is a simple weather app built as part of my practice with asynchronous Java
 * Error handling for invalid city names
 * Responsive layout
 * Loading spinner while fetching data (on page load/reload 2-second delay was intentionally added to showcase the loader.)
-* Dynamic Weather icons
+* Dynamic import of Weather icons
 
 **📦 What I Practiced**
 * Working with Promises, async/await, and the Fetch API
 * Parsing and restructuring JSON data
+* Handling various network and request errors with try/catch + Response object
 * Dynamically updating the DOM
 * Adding loading indicators to improve UX experience
 

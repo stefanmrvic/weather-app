@@ -6,12 +6,133 @@
     <title>Weather App</title>
 </head>
 <body>
-
+    <!-- Loader -->
+    <div class="loader__wrapper">
+        <div class="loader"></div>
+    </div>
     <main>
-        <div class="container">
-            
+        <div class="container--left">
+            <div class="weather__info">
+                <h1 class="weather__conditions"></h1>
+                <h3 class="weather__city"></h3>
+                <p class="weather__date"></p>
+                <p class="weather__time"></p>
+            </div>
+            <div class="weather__temperature">
+                <h1 id="temperature"></h1>
+
+                <!-- Start of Switch button section for metric/imperial units -->
+                <div class="weather__units">
+                    <p class="weather__units-text">Display temperature in:</p>
+                    <span class="celsius">°C</span>
+                    <label class="switch" for="switch">
+                        <input type="checkbox" id="switch">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="fahrenheit">°F</span>
+                </div>
+                <!-- End of Switch button section for metric/imperial units -->
+
+            </div>
+            <div class="weather__img">
+                <img src="/src/assets/SVG/cloudy.svg" alt="weather icon" id="icon">
+            </div>
+
+            <form action="#" method="get" class="form">
+                <span class="error__msg">Error: Searched City Not Found!</span>
+
+                <div class="search__wrapper">
+                    <label for="search"></label>
+                    <input type="search" name="search" id="search" placeholder="Search Location...">
+                    <input type="submit" value="" id="searchBtn">
+                </div>
+            </form>
+        </div>
+
+        <div class="container--right">
+            <div class="weather__feels-like">
+                <div class="feels-like__icon-wrapper">
+                    <img src="/src/assets/SVG/thermo.svg" alt="thermo icon" class="feels-like__img">
+                </div>
+                <div class="feels-like__text-wrapper">
+                    <p class="feels-like__title">Feels Like</p>
+                    <p class="feels-like__temperature"></p>
+                </div>
+            </div>
+            <div class="weather__humidity">
+                <div class="humidity__icon-wrapper">
+                    <img src="/src/assets/SVG/humidity.svg" alt="humidity icon" class="humidity__img">
+                </div>
+                <div class="humidity__text-wrapper">
+                    <p class="humidity__title">Humidity</p>
+                    <p class="humidity__percentage"></p>
+                </div>
+            </div>
+            <div class="weather__chance-of-precip">
+                <div class="chance-of-precip__icon-wrapper">
+                    <img src="/src/assets/SVG/rainy.svg" alt="" class="chance-of-precip__img">
+                </div>
+                <div class="chance-of-precip__text-wrapper">
+                    <p class="chance-of-precip__title">Chance of Rain</p>
+                    <p class="chance-of-precip__percentage"></p>
+                </div>
+            </div>
+            <div class="weather__wind-speed">
+                <div class="wind-speed__icon-wrapper">
+                    <img src="/src/assets/SVG/wind.svg" alt="wind icon" class="wind-speed__img">
+                </div>
+                <div class="wind-speed__text-wrapper">
+                    <p class="wind-speed__title">Wind Speed</p>
+                    <p class="wind-speed__speed"></p>
+                </div>
+            </div>
         </div>
     </main>
-    
+
+    <div class="container--bottom">
+        <h3 class="next-7-days">Next 7 Days</h3>
+
+        <div class="weather__monday">
+            <h3 class="monday">Monday</h3>
+            <p class="monday__temperature"></p>
+            <img src="#" alt="" class="monday__img">
+        </div>
+
+        <div class="weather__tuesday">
+            <h3 class="tuesday">Tuesday</h3>
+            <p class="tuesday__temperature"></p>
+            <img src="#" alt="" class="tuesday__img">
+        </div>
+
+        <div class="weather__wednesday">
+            <h3 class="wednesday">Wednesday</h3>
+            <p class="wednesday__temperature"></p>
+            <img src="#" alt="" class="wednesday__img">
+        </div>
+
+        <div class="weather__thursday">
+            <h3 class="thursday">Thursday</h3>
+            <p class="thursday__temperature"></p>
+            <img src="#" alt="" class="thursday__img">
+        </div>
+
+        <div class="weather__friday">
+            <h3 class="friday">Friday</h3>
+            <p class="friday__temperature"></p>
+            <img src="#" alt="" class="friday__img">
+        </div>
+
+        <div class="weather__saturday">
+            <h3 class="saturday">Saturday</h3>
+            <p class="saturday__temperature"></p>
+            <img src="#" alt="" class="saturday__img">
+        </div>
+
+        <div class="weather__sunday">
+            <h3 class="sunday">Sunday</h3>
+            <p class="sunday__temperature"></p>
+            <img src="#" alt="" class="sunday__img">
+        </div>
+    </div>
 </body>
 </html>

@@ -1,0 +1,563 @@
+body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-image: url('/src/assets/imgs/background.jpg');
+    background-size: cover;
+    height: 100vh;
+    padding: 26px;
+
+    @media screen and (min-width: 800px) {
+        padding: 48px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        padding: 63px;
+    }
+
+    @media screen and (min-width: 1600px) {
+        padding: 80px;
+    }
+}
+
+// Adds black opacity overlay on top of the body background image
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 1;
+}
+
+h1,
+h3,
+p,
+span {
+    color: white;
+}
+
+main,
+.container--left,
+.conatiner--right,
+.container--bottom {
+    position: relative;
+    z-index: 2;
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (min-width: 750px) {
+        font-size: 32px;
+        flex-wrap: wrap;
+    }
+}
+
+.container--left {
+    max-width: 55%;
+}
+
+.weather__conditions {
+    font-size: 25px;
+    margin-bottom: 7px;
+    font-weight: 500;
+    line-height: 1;
+
+    @media screen and (min-width: 750px) {
+        font-size: 32px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 36px;
+        margin-bottom: 8px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+}
+
+.weather__city {
+    font-size: 14px;
+    margin-bottom: 7px;
+    font-weight: 500;
+
+    @media screen and (min-width: 1200px) {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+}
+
+.weather__date {
+    font-size: 12px;
+    font-weight: 600;
+
+    @media screen and (min-width: 1200px) {
+        font-size: 13px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 14px;
+    }
+}
+
+.weather__time {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 13px;
+
+    @media screen and (min-width: 750px) {
+        font-size: 16px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 18px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+}
+
+#temperature {
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 5px;
+
+    @media screen and (min-width: 750px) {
+        font-size: 46px;
+        margin-bottom: 10px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 50px;
+        margin-bottom: 15px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 55px;
+        margin-bottom: 20px;
+    }
+}
+
+.weather__units {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 16px;
+
+    @media screen and (min-width: 750px) {
+        margin-bottom: 20px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        margin-bottom: 22px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        margin-bottom: 25px;
+    }
+}
+
+.weather__units-text {
+    font-size: 12px;
+    margin-bottom: 10px;
+    flex-basis: 100%;
+
+    @media screen and (min-width: 1200px) {
+        font-size: 13px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 16px;
+    }
+}
+
+.celsius {
+    font-size: 13px;
+    margin-right: 5px;
+
+    @media screen and (min-width: 1200px) {
+        font-size: 14px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 16px;
+    }
+}
+
+.fahrenheit {
+    font-size: 13px;
+    margin-left: 5px;
+
+    @media screen and (min-width: 1200px) {
+        font-size: 14px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 16px;
+    }
+}
+
+.weather__img {
+    width: 64px;
+    margin-bottom: 9px;
+
+    @media screen and (min-width: 750px) {
+        font-size: 80px;
+        margin-bottom: 12px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 90px;
+        margin-bottom: 14px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        width: 100px;
+        margin-bottom: 16px;
+    }
+}
+
+#search {
+    color: white;
+    font-size: 13px;
+    padding: 5px 35px 5px 10px;
+    width: 100%;
+    max-width: 219px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid white;
+    outline: none;
+
+    @media screen and (min-width: 500px) {
+        font-size: 14px;
+    }
+}
+
+#search::placeholder {
+    color: white;
+    opacity: 0.55;
+}
+
+#searchBtn {
+    background: url('/src/assets/imgs/search-icon.png') no-repeat center center;
+    background-size: contain;
+    position: relative;
+    top: -27px;
+    right: -85%;
+    height: 19px;
+    width: 19px;
+    border: none;
+    cursor: pointer;
+
+    @media screen and (min-width: 460px) {
+        right: -85%;
+    }
+
+    @media screen and (min-width: 493px) {
+        top: -3px;
+        right: 36px;
+    }
+}
+
+.search__wrapper {
+    position: relative;
+}
+
+.error__msg {
+    display: none;
+    position: relative;
+    font-size: 10px;
+    color: red;
+    bottom: 0;
+    left: 2px;
+    margin-bottom: 3px;
+
+    @media screen and (min-width: 750px) {
+        font-size: 12px;
+        position: absolute;
+        min-width: 240px;
+        bottom: 39px;
+        margin-bottom: 0;
+    }
+
+    @media screen and (min-width: 750px) {
+        font-size: 14px;
+        position: absolute;
+        min-width: 240px;
+        bottom: 39px;
+        margin-bottom: 0;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 15px;
+    }
+}
+
+.container--right {
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+    min-width: 95px;
+
+    @media screen and (min-width: 750px) {
+        gap: 24px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        gap: 26px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        gap: 28px;
+    }
+}
+
+.weather__feels-like,
+.weather__humidity,
+.weather__chance-of-precip,
+.weather__wind-speed {
+    display: flex;
+}
+
+.feels-like__icon-wrapper,
+.humidity__icon-wrapper,
+.chance-of-precip__icon-wrapper,
+.wind-speed__icon-wrapper {
+    margin-right: 10px;
+}
+
+.feels-like__title,
+.humidity__title,
+.chance-of-precip__title,
+.wind-speed__title {
+    font-size: 9px;
+    margin-bottom: 6px;
+    font-weight: 600;
+
+    @media screen and (min-width: 750px) {
+        font-size: 10px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 12px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 13px;
+    }
+}
+
+.feels-like__temperature,
+.humidity__percentage,
+.chance-of-precip__percentage,
+.wind-speed__speed {
+    font-size: 17px;
+    font-weight: 600;
+
+    @media screen and (min-width: 750px) {
+        font-size: 21px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 23px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 26px;
+    }
+}
+
+.feels-like__img,
+.humidity__img,
+.chance-of-precip__img,
+.wind-speed__img {
+    width: 19px;
+
+    @media screen and (min-width: 750px) {
+        width: 24px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        width: 27px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        width: 30px;
+    }
+}
+
+.container--bottom {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 92px;
+
+    @media screen and (min-width: 700px) {
+        justify-content: space-between;
+        flex-wrap: nowrap;
+    }
+}
+
+.next-7-days {
+    position: absolute;
+    top: -63px;
+    left: 50%;
+    font-size: 15px;
+    border: 2px solid white;
+    padding: 6px 12px;
+    flex-basis: 100%;
+    margin-bottom: 30px;
+    transform: translateX(-50%);
+
+    @media screen and (min-width: 700px) {
+        left: 0;
+        transform: translateX(0);
+    }
+}
+
+.weather__monday,
+.weather__tuesday,
+.weather__wednesday,
+.weather__thursday,
+.weather__friday,
+.weather__saturday,
+.weather__sunday {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+
+    @media screen and (min-width: 350px) {
+        width: 85%;
+    }
+
+    @media screen and (min-width: 400px) {
+        width: 80%;
+    }
+
+    @media screen and (min-width: 450px) {
+        width: 70%;
+    }
+
+    @media screen and (min-width: 500px) {
+        width: 65%;
+    }
+
+    @media screen and (min-width: 550px) {
+        width: 60%;
+    }
+
+    @media screen and (min-width: 700px) {
+        display: initial;
+        align-items: unset;
+        margin-right: initial;
+        margin-bottom: 0;
+        width: 100%;
+    }
+}
+
+.monday,
+.tuesday,
+.wednesday,
+.thursday,
+.friday,
+.saturday,
+.sunday {
+    font-size: 15px;
+    margin-right: auto;
+    margin-bottom: 0;
+
+    @media screen and (min-width: 700px) {
+        margin-bottom: 20px;
+        margin-right: initial;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 18px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 20px;
+    }
+}
+
+.monday__temperature,
+.tuesday__temperature,
+.wednesday__temperature,
+.thursday__temperature,
+.friday__temperature,
+.saturday__temperature,
+.sunday__temperature {
+    font-size: 21px;
+    font-weight: 700;
+    margin-right: 25px;
+
+    @media screen and (min-width: 700px) {
+        margin-right: initial;
+        margin-bottom: 20px;
+        margin-right: 0;
+    }
+
+    @media screen and (min-width: 750px) {
+        font-size: 24px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 26px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        font-size: 28px;
+    }
+}
+
+.monday__img,
+.tuesday__img,
+.wednesday__img,
+.thursday__img,
+.friday__img,
+.saturday__img,
+.sunday__img {
+    width: 30px;
+
+    @media screen and (min-width: 750px) {
+        width: 36px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        width: 42px;
+    }
+
+    @media screen and (min-width: 1700px) {
+        width: 65px;
+    }
+}
+
+main,
+.container--bottom {
+    // Initially hides all content until the page is first loaded/populated
+    display: none;
+}
+
+.reveal {
+    display: flex;
+}
+
+.hide {
+    display: none;
+}

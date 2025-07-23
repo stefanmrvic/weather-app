@@ -6,9 +6,8 @@ This is a simple weather app built as part of my practice with asynchronous Java
 <img width="2556" height="1282" alt="weatherApp" src="https://github.com/user-attachments/assets/5cdf2145-7127-4be4-847d-1c76a07f487c" />
 
 **🧠 APIs Used**
-* Geolocation API to gather the user's approximate location
-* Visual Crossing API to fetch the weather data
-  
+* [Geolocation API](https://geolocation-db.com/) to gather the user's approximate location 
+* [Visual Crossing API](https://www.visualcrossing.com/weather-api/) to fetch the weather data 
 **🛠️ Features**
 * Input form to search weather by city name
 * Fetches live weather data using fetch with async/await

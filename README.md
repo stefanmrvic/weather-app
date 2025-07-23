@@ -21,7 +21,7 @@ This is a simple weather app built as part of my practice with asynchronous Java
   - Chance of Rain
 * Error handling for invalid city names
 * Responsive layout
-* Loading spinner while fetching data (added intentionally 2 seconds delay on page load/reload so you can see the loader!)
+* Loading spinner while fetching data (on page load/reload 2-second delay was intentionally added to showcase the loader.)
 * Dynamic Weather icons
 
 **📦 What I Practiced**

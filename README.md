@@ -1,7 +1,12 @@
-# The Odin Project JavaScript
+# The Odin Project - JavaScript
 ## Project: 🌦️ Weather App
 
 This is a simple weather app built as part of my practice with asynchronous JavaScript, fetching APIs, and DOM manipulation. The app allows users to input a location and retrieves real-time weather data using the OpenWeather API.
+
+
+<img width="2556" height="1282" alt="app_screenshot" src="https://github.com/user-attachments/assets/326b6056-f792-4942-aca9-f10fcdbc5bb5" />
+
+
 
 **🛠️ Features**
 * Input form to search weather by city name
@@ -26,3 +31,6 @@ This is a simple weather app built as part of my practice with asynchronous Java
 2. Open index.html in your browser
 3. Enter a city name and press submit
 4. View the weather data instantly!
+
+**🗈 Note**  
+* I have intentionally added 3 seconds delay (inside generateWeatherInfoLeft() in weather.js) so that you have enough time to see the cool loading animation! 

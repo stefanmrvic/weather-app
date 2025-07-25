@@ -6,6 +6,10 @@
     <title>Weather App</title>
 </head>
 <body>
+    <!-- Loader -->
+    <div class="loader__wrapper">
+        <div class="loader"></div>
+    </div>
     <main>
         <div class="container--left">
             <div class="weather__info">
@@ -31,10 +35,12 @@
 
             </div>
             <div class="weather__img">
-                <img src="#" alt="weather icon" id="icon">
+                <img src="/src/assets/SVG/cloudy.svg" alt="weather icon" id="icon">
             </div>
 
             <form action="#" method="get" class="form">
+                <span class="error__msg">Error: Searched City Not Found!</span>
+
                 <div class="search__wrapper">
                     <label for="search"></label>
                     <input type="search" name="search" id="search" placeholder="Search Location...">
@@ -68,7 +74,7 @@
                 </div>
                 <div class="chance-of-precip__text-wrapper">
                     <p class="chance-of-precip__title">Chance of Rain</p>
-                    <p class="chance-of-precip__percentage">0 %</p>
+                    <p class="chance-of-precip__percentage"></p>
                 </div>
             </div>
             <div class="weather__wind-speed">

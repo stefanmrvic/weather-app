@@ -232,15 +232,19 @@ main {
 }
 
 #search {
-    background: none;
     color: white;
+    font-size: 13px;
     padding: 5px 35px 5px 10px;
-    font-size: 14px;
     width: 100%;
     max-width: 219px;
+    background: none;
     border: none;
     border-bottom: 3px solid white;
     outline: none;
+
+    @media screen and (min-width: 500px) {
+        font-size: 14px;
+    }
 }
 
 #search::placeholder {
@@ -271,6 +275,36 @@ main {
 
 .search__wrapper {
     position: relative;
+}
+
+.error__msg {
+    display: none;
+    position: relative;
+    font-size: 10px;
+    color: red;
+    bottom: 0;
+    left: 2px;
+    margin-bottom: 3px;
+
+    @media screen and (min-width: 750px) {
+        font-size: 12px;
+        position: absolute;
+        min-width: 240px;
+        bottom: 39px;
+        margin-bottom: 0;
+    }
+
+    @media screen and (min-width: 750px) {
+        font-size: 14px;
+        position: absolute;
+        min-width: 240px;
+        bottom: 39px;
+        margin-bottom: 0;
+    }
+
+    @media screen and (min-width: 1200px) {
+        font-size: 15px;
+    }
 }
 
 .container--right {
@@ -512,4 +546,18 @@ main {
     @media screen and (min-width: 1700px) {
         width: 65px;
     }
+}
+
+main,
+.container--bottom {
+    // Initially hides all content until the page is first loaded/populated
+    display: none;
+}
+
+.reveal {
+    display: flex;
+}
+
+.hide {
+    display: none;
 }

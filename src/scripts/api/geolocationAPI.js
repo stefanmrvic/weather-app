@@ -8,7 +8,7 @@ export function getUserCity() {
         .then((response) => {
             if (!response.ok) {
                 throw new Error(
-                    `Error: Geolocation fetch failed! \n${response.status}: ${response.statusText}`
+                    `Error: Geolocation API fetch failed! \n${response.status}: ${response.statusText}`
                 );
             }
             return response.json();
@@ -25,6 +25,6 @@ export function getUserCity() {
         })
         .catch((err) => {
             console.log(err);
-            throw new Error('Error: Unable to parse the JSON file of getUserCity()');
+            throw new Error('Error: Unable to parse the JSON file of getUserCity()!');
         });
 }

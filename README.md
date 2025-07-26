@@ -8,8 +8,7 @@ This is a simple weather app built as part of my practice with asynchronous Java
 **🧠 APIs Used**
 * [Geolocation API](https://geolocation-db.com/) to gather the user's approximate location 
 * [Visual Crossing API](https://www.visualcrossing.com/weather-api/) to fetch the weather data
-
-      
+    
 **🛠️ Features** 
 * Fetching user approximate city and displays weather forecast for that city
 * Input field to search weather by city name
@@ -24,6 +23,12 @@ This is a simple weather app built as part of my practice with asynchronous Java
 * Loading spinner while fetching data (on page load/reload 2-second delay was intentionally added to showcase the loader.)
 * Dynamic import of Weather icons
 
+**🧬 Different Async Implementations**  
+  
+This project includes two separate branches that demonstrate different approaches to handling asynchronous code:
+* ```feature/promises```: Implements the app logic using traditional Promise chaining
+* ```feature/async```: Rewrites the same logic using modern async/await syntax
+  
 **📦 What I Practiced**
 * Working with Promises, async/await, and the Fetch API
 * Parsing and restructuring JSON data

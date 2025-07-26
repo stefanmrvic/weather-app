@@ -26,8 +26,8 @@ function setInitialState() {
     // Gathering user location through Geolocation API and then passing that city into Visual Crossing API to fetch weather data.
     getUserCity()
         .then((url) => {
-            fetchResults(url);
             hideError();
+            return fetchResults(url);
         })
         .then(() => {
             // Calls all of the DOM rendering function and waits until they are all done executing

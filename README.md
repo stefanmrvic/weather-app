@@ -1,36 +1,42 @@
 # The Odin Project - JavaScript
+
 ## Project: 🌦️ Weather App
 
 This is a simple weather app built as part of my practice with asynchronous JavaScript, fetching APIs, and DOM manipulation. The app allows users to input a location and retrieves real-time weather data using the OpenWeather API.
 
+<img width="2556" height="1282" alt="weatherApp" src="https://github.com/user-attachments/assets/5cdf2145-7127-4be4-847d-1c76a07f487c" />
 
-<img width="2556" height="1282" alt="app_screenshot" src="https://github.com/user-attachments/assets/326b6056-f792-4942-aca9-f10fcdbc5bb5" />
+**🧠 APIs Used**
 
-
+- [Geolocation API](https://geolocation-db.com/) to gather the user's approximate location
+- [Visual Crossing API](https://www.visualcrossing.com/weather-api/) to fetch the weather data
 
 **🛠️ Features**
-* Input form to search weather by city name
-* Fetches live weather data using fetch with async/await
-* Processes and displays relevant weather info like:
-* Temperature
-* Weather description
-* Location name
-* Error handling for invalid city names
-* Basic responsive layout
-* loading spinner while fetching data
-* Weather icons
+
+- Fetching user approximate city and displays weather forecast for that city
+- Input field to search weather by city name
+- Fetches live weather data using fetch with async/await
+- Processes and displays relevant weather info like:
+    - Temperature
+    - Weather description
+    - Location name
+    - Chance of Rain
+- Error handling for invalid city names
+- Responsive layout
+- Loading spinner while fetching data (on page load/reload 2-second delay was intentionally added to showcase the loader.)
+- Dynamic import of Weather icons
 
 **📦 What I Practiced**
-* Working with Promises, async/await, and the Fetch API
-* Parsing and restructuring JSON data
-* Dynamically updating the DOM
-* Adding loading indicators to improve UX experience
+
+- Working with Promises, async/await, and the Fetch API
+- Parsing and restructuring JSON data
+- Handling various network and request errors with try/catch + Response object
+- Dynamically updating the DOM
+- Adding loading indicators to improve UX experience
 
 **🚀 How to Run**
-1. Clone this repo
-2. Open index.html in your browser
-3. Enter a city name and press submit
-4. View the weather data instantly!
 
-**🗈 Note**  
-* I have intentionally added 3 seconds delay (inside generateWeatherInfoLeft() in weather.js) so that you have enough time to see the cool loading animation! 
+1. Clone this repo
+2. `npm install` to install the dependencies
+3. `npm run start` to start the dev server
+4. Enter the city in the field and press enter or click the button to fetch the data!

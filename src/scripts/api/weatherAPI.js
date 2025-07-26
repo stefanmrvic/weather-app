@@ -10,7 +10,9 @@ export function fetchResults(url) {
     return fetch(url, { mode: 'cors' })
         .then((response) => {
             if (!response.ok) {
-                const error = new Error(`Error: Weather API fetch failed! \n${response.status}: ${response.statusText}`)
+                const error = new Error(
+                    `Error: Weather API fetch failed! \n${response.status}: ${response.statusText}`
+                );
                 error.status = response.status;
                 error.statusText = 'Error: Weather API fetch failed!';
                 throw error;
@@ -48,34 +50,8 @@ export function fetchResults(url) {
 
             console.log(err);
             throw err;
-        })
+        });
 }
-
-// TODO: separate the concerns (DOM rendering logic) from fetcWeather function
-export async function fetchWeather(e) {
-    // Prevents form from submitting and reloading the page.
-    e.preventDefault();
-
-    // Capturing current values of input field and last captured searched city through getter function from AppState.js
-    const citySearched = searchedCity.getCity();
-    const lastSearchedCity = lastCitySearched.getCity();
-
-    // Exits early if search bar is empty and it doesn't have the record of the user's last searched city.
-    if (!citySearched && !lastSearchedCity) return;
-
-    const searchParam = citySearched ? citySearched : lastSearchedCity;
-
-    let url = buildURL(searchParam);
-
-    const result = await fetchResults(url);
-
-    if (!result) throw new Error('Error: Unable to fetch the requested URL!');
-
-    renderDailyForecast();
-    renderWeatherDetails();
-    renderWeeklyForecast();
-}
-
 
 // TODO: separate the concerns (DOM rendering logic) from fetcWeather function
 export function fetchWeather(e) {
@@ -94,13 +70,13 @@ export function fetchWeather(e) {
     let url = buildURL(searchParam);
 
     fetchResults(url)
-    .then(() => {
-        renderDailyForecast();
-        renderWeatherDetails();
-        renderWeeklyForecast();
-    })
-    .catch(err) {
-        console.log(`Error: Unable to fetch the requested URL! \n${err}`)
-        new Error('Error: Unable to fetch the requested URL!');
-    }
+        .then(() => {
+            renderDailyForecast();
+            renderWeatherDetails();
+            renderWeeklyForecast();
+        })
+        .catch((err) => {
+            console.log(`Error: Unable to fetch the requested URL! \n${err}`);
+            throw new Error('Error: Unable to fetch the requested URL!');
+        });
 }

@@ -22,26 +22,30 @@ search.addEventListener('input', () => {
 searchBtn.addEventListener('click', fetchWeather);
 switchBtn.addEventListener('change', fetchWeather);
 
-async function setInitialState() {
-    // Gathering User Location through Geolocation API and the passing that city into Visual Crossing API to fetch weather data.
-    try {
-        const url = await getUserCity();
-        const result = await fetchResults(url);
-
-        if (!result) throw new Error('Error: Unable to fetch the requested URL!');
-
-        hideError();
-
-        await Promise.all([renderDailyForecast(), renderWeatherDetails(), renderWeeklyForecast()]);
-
-        revealContent();
-
-        // If any at step of the process something fails, it informs the user that initialization of data failed and it logs error into console.log.
-    } catch (err) {
-        showError('Error: Failed to initialize the data!');
-        console.log(err);
-        revealContent();
-    }
+function setInitialState() {
+    // Gathering user location through Geolocation API and then passing that city into Visual Crossing API to fetch weather data.
+    getUserCity()
+        .then((url) => {
+            fetchResults(url);
+            hideError();
+        })
+        .then(() => {
+            // Calls all of the DOM rendering function and waits until they are all done executing
+            return Promise.all([
+                renderDailyForecast(),
+                renderWeatherDetails(),
+                renderWeeklyForecast(),
+            ]);
+        })
+        .catch((err) => {
+            // If any at step of the process something fails, it informs the user that initialization of data failed and it logs error into console.log.
+            console.log(err);
+            throw err;
+        })
+        .finally(() => {
+            // Reveals content regardless of whether the fetch was successful or not, so the user can still see fallback data until they search for a city.
+            revealContent();
+        });
 }
 
 function revealContent() {
